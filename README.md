@@ -7,4 +7,5 @@ model. The current game we are thinking about is tetris.
 Research Links:
 
 https://github.com/openai/gym
+
 https://www.learndatasci.com/tutorials/reinforcement-q-learning-scratch-python-openai-gym/
