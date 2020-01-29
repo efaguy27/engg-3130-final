@@ -5,4 +5,5 @@ Our idea for our final project is to teach a computer to play a classic video us
 model. The current game we are thinking about is tetris.
 
 Research Links:
+
 https://github.com/openai/gym
