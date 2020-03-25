@@ -110,7 +110,7 @@ class DQNAgent:
         return best_state
 
 
-    def train(self, batch_size=32, epochs=3):
+    def train(self, batch_size= 512, epochs=1):
         '''Trains the agent'''
         n = len(self.memory)
     
