@@ -84,7 +84,7 @@ class Tetris:
         self.next_piece = self.bag.pop()
         self._new_round()
         self.score = 0
-        self.frame = 0
+        self.img_list = []
         return self._get_board_props(self.board)
 
 
@@ -276,7 +276,7 @@ class Tetris:
         return 4
 
 
-    def play(self, x, rotation, render=False, render_delay=None, record=False):
+    def play(self, x, rotation, episode, render=False, render_delay=None, record=False):
         '''Makes a play given a position and a rotation, returning the reward and if the game is over'''
         self.current_pos = [x, 0]
         self.current_rotation = rotation
@@ -285,15 +285,16 @@ class Tetris:
         while not self._check_collision(self._get_rotated_piece(), self.current_pos):
             if render:
                 self.render(record)
-                if render_delay:
-                    sleep(render_delay)
+                """if render_delay:
+                    sleep(render_delay)"""
             self.current_pos[1] += 1
         self.current_pos[1] -= 1
 
         # Update board and calculate score        
         self.board = self._add_piece_to_board(self._get_rotated_piece(), self.current_pos)
         lines_cleared, self.board = self._clear_lines(self.board)
-        score = 1 + (lines_cleared ** 2) * Tetris.BOARD_WIDTH
+        t_bumpiness, m_bumpiness = self._bumpiness(self.board)
+        score = (1 + (lines_cleared ** 2) * Tetris.BOARD_WIDTH)
         self.score += score
 
 
@@ -301,6 +302,13 @@ class Tetris:
         self._new_round()
         if self.game_over:
             score -= 2
+            if record:
+                if self.score > 100 or episode % 500 == 0 or episode == 1999:
+                    if not os.path.exists('games'):
+                        os.mkdir('games')
+                    file = f'games/tetris-{str(episode)}'
+                    img_array = np.array(self.img_list)
+                    np.savez_compressed(file, img_array)
 
         return score, self.game_over
 
@@ -313,13 +321,6 @@ class Tetris:
         img = Image.fromarray(img, 'RGB')
         img = img.resize((Tetris.BOARD_WIDTH * 20, Tetris.BOARD_HEIGHT * 20))
         img = np.array(img)
-        #import ipdb;ipdb.set_trace()
         if record:
-            if not os.path.exists('frames'):
-                os.mkdir('frames')
-            file = f'frames/tetris-nn={str(self.frame)}'
-            np.save(file, img)
-            self.frame += 1
-        cv2.putText(img, str(self.score), (22, 22), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1)
-        cv2.imshow('image', np.array(img))
-        cv2.waitKey(1)
+            if len(self.img_list) < 20000:
+                self.img_list.append(img)

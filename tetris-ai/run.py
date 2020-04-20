@@ -5,32 +5,34 @@ from statistics import mean, median
 import random
 from logs import CustomTensorBoard
 from tqdm import tqdm
+import os
         
 
 # Run dqn with Tetris
 def dqn():
     env = Tetris()
     episodes = 2000
-    max_steps = 50000
+    max_steps = 1000000000
     epsilon_stop_episode = 1500
     mem_size = 20000
     discount = 0.95
     batch_size = 512
     epochs = 1
-    render_every = 500
-    log_every = 50
+    render_every = 1
+    log_every = 1
     replay_start_size = 2000
     train_every = 1
     n_neurons = [32, 32]
     render_delay = 0.01
     activations = ['relu', 'relu', 'linear']
+    m = 0
 
     agent = DQNAgent(env.get_state_size(),
                      n_neurons=n_neurons, activations=activations,
                      epsilon_stop_episode=epsilon_stop_episode, mem_size=mem_size,
                      discount=discount, replay_start_size=replay_start_size)
 
-    log_dir = f'logs/tetris-nn={str(n_neurons)}-mem={mem_size}-bs={batch_size}-e={epochs}-{datetime.now().strftime("%Y%m%d-%H%M%S")}'
+    log_dir = f'logs/tetris-eps={episodes}-e-stop={epsilon_stop_episode}-e={epochs}-{datetime.now().strftime("%Y%m%d-%H%M%S")}'
     log = CustomTensorBoard(log_dir=log_dir)
 
     scores = []
@@ -40,15 +42,12 @@ def dqn():
         current_state = env.reset()
         done = False
         steps = 0
-
+        
         if (render_every and episode % render_every == 0) or episode == (episodes - 1):
             render = True
-        else:
-            render = False
-			
-        if episode == (episodes - 1):
             record = True
         else:
+            render = False
             record = False
 
         # Game
@@ -62,7 +61,7 @@ def dqn():
                     best_action = action
                     break
 
-            reward, done = env.play(best_action[0], best_action[1], render=render,
+            reward, done = env.play(best_action[0], best_action[1], episode, render=render,
                                     render_delay=render_delay, record=record)
             
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
@@ -78,13 +77,11 @@ def dqn():
 
         # Logs
         if log_every and episode and episode % log_every == 0:
-            avg_score = mean(scores[-log_every:])
-            min_score = min(scores[-log_every:])
-            max_score = max(scores[-log_every:])
-            avg_steps = mean(steps_list[-log_every:])
+            avg_score = scores[-log_every]
+            avg_steps = steps_list[-log_every]
 
-            log.log(episode, avg_score=avg_score, min_score=min_score,
-                    max_score=max_score, avg_steps=avg_steps)
+            log.log(episode, avg_score=avg_score,
+                   avg_steps=avg_steps)
 
 
 if __name__ == "__main__":
