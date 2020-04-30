@@ -6,10 +6,4 @@ model. The current game we are thinking about is tetris.
 
 The objective of our project is to analyze the effectiveness of different machine learning algorithms in the same enviroment.
 
-Research Links:
-
-https://github.com/openai/gym
-
-https://www.learndatasci.com/tutorials/reinforcement-q-learning-scratch-python-openai-gym/
-
-https://en.wikipedia.org/wiki/Machine_learning_in_video_games
+To create the necessary environment you must first install Microsoft Visual C++ Build Tools for Visual Studio 2017 which can be found here: https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16
