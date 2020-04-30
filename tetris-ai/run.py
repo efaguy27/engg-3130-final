@@ -13,10 +13,10 @@ def dqn():
     env = Tetris()
     episodes = 2000
     max_steps = 1000000000
-    epsilon_stop_episode = 1500
+    epsilon_stop_episode = 1750
     mem_size = 20000
     discount = 0.95
-    batch_size = 512
+    batch_size = 1024
     epochs = 1
     render_every = 1
     log_every = 1
@@ -77,11 +77,10 @@ def dqn():
 
         # Logs
         if log_every and episode and episode % log_every == 0:
-            avg_score = scores[-log_every]
-            avg_steps = steps_list[-log_every]
+            score = scores[-log_every]
+            steps = steps_list[-log_every]
 
-            log.log(episode, avg_score=avg_score,
-                   avg_steps=avg_steps)
+            log.log(episode, score = score, steps = steps)
 
 
 if __name__ == "__main__":

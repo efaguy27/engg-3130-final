@@ -1,0 +1,27 @@
+name: engg3130-final
+channels:
+  - conda-forge
+dependencies:
+  - python=3.6
+  - pip
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - sphinx
+  - jupyter
+  - networkx=1.*
+  - nbstripout
+  - seaborn
+  - tqdm
+  - future
+  - ffmpeg
+  - tensorflow
+  - swig
+  - tensorboard
+  - gym[atari,box2d]
+  - pytorch
+  - pip:
+    - autonomous-learning-library==0.5.1
+    - atari_py
+    - opencv-python==4.2.0.34

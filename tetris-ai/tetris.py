@@ -304,9 +304,9 @@ class Tetris:
             score -= 2
             if record:
                 if self.score > 100 or episode % 500 == 0 or episode == 1999:
-                    if not os.path.exists('games'):
-                        os.mkdir('games')
-                    file = f'games/tetris-{str(episode)}'
+                    if not os.path.exists('big_games'):
+                        os.mkdir('big_games')
+                    file = f'big_games/tetris-{str(episode)}'
                     img_array = np.array(self.img_list)
                     np.savez_compressed(file, img_array)
 
