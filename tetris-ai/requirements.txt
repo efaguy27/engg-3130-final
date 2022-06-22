@@ -2,6 +2,6 @@ tensorflow==1.14.0
 tensorboard==1.14.0
 Keras==2.2.4
 opencv-python==4.1.0.25
-numpy==1.16.4
+numpy==1.22.0
 Pillow==5.4.1
 tqdm==4.31.1
